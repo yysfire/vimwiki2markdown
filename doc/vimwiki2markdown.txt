@@ -1,0 +1,25 @@
+*vimwiki2markdown.txt* A short multi line description of your plugin
+
+===============================================================================
+CONTENTS                                                     *vimwiki2markdown*
+
+    1. Intro ......................................... |vimwiki2markdown-intro|
+    2. Requirements ........................... |vimwiki2markdown-requirements|
+    3. Usage ......................................... |vimwiki2markdown-usage|
+    4. Licence ..................................... |vimwiki2markdown-licence|
+===============================================================================
+1. Intro                                               *vimwiki2markdown-intro*
+
+Overview of plugin
+
+2. Requirements                                 *vimwiki2markdown-requirements*
+
+What additional programs are required to run the plugin
+
+3. Usage                                               *vimwiki2markdown-usage*
+
+How to use the plugin. What functions does it give the user?
+
+4. Licence                                           *vimwiki2markdown-licence*
+
+This is open source make sure to include a licence
