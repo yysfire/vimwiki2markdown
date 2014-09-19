@@ -1,5 +1,7 @@
 # vimwiki2markdown
 
+This is a Vim plugin for converting [Vimwiki](http://www.vim.org/scripts/script.php?script_id=2226) file to Markdown file. It's written with Python, so your Vim must be compiled with feature "+python" or "+python3".
+
 ## Installation
 
 Use your plugin manager of choice.
@@ -18,5 +20,11 @@ Use your plugin manager of choice.
 
 ## Todo
 
-1. Write a plugin
-2. Write documentation
+1. Convert Vimwiki file to [Strict Markdown](http://daringfireball.net/projects/markdown/syntax) file
+1. Convert Vimwiki file to Markdown file for [Pelican](http://docs.getpelican.com/)
+1. Add command to convert all Vimwiki files to Markdown
+1. Write documentation
+1. Support Github Flavored Markdown
+1. Support PHP Markdown Extra
+1. Support MultiMarkdown
+1. Support converting Markdown to Vimwiki
