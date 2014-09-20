@@ -36,6 +36,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
     if (mkdtype == 'pelican'):
         text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*(.*?)"', r'\1\n:::\2\n', text)
         text = re.sub(r'(?im)^\s*({{{)[ \t]*([\w].*)', r'\1\n:::\2\n', text)
+
     text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})',
             indent4, text)
 
@@ -48,14 +49,20 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             # eol(Only for non code block)
             text = re.sub('\r\n', '\n', text)
 
-            # Metadata(Only for non code block)
-            text = re.sub(r'(?m)^%title (.*)$', r'Title: \1', text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%template (.*)$', r'Category: \1', text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%toc.*$',r'[TOC]', text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%% (Date:.*)$', r'\1',text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%% (Modified:.*)$', r'\1', text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%% (Tags:.*)$',r'\1', text, flags=re.IGNORECASE)
-            text = re.sub(r'(?m)^%% (Slug:.*)$',r'\1', text, flags=re.IGNORECASE)
+            if (mkdtype == 'pelican'):
+                # Metadata(Only for non code block)
+                text = re.sub(r'(?m)^%title (.*)$', r'Title: \1', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%template (.*)$', r'Category: \1', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%toc.*$',r'[TOC]', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%% (Date:.*)$', r'\1',text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%% (Modified:.*)$', r'\1', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%% (Tags:.*)$',r'\1', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?m)^%% (Slug:.*)$',r'\1', text, flags=re.IGNORECASE)
+            elif mkdtype == 'strict':
+                text = re.sub(r'(?mi)^%title (.*)$', r'', text)
+                text = re.sub(r'(?mi)^%template (.*)$', r'', text)
+                text = re.sub(r'(?mi)^%toc.*$',r'', text)
+
             # Comment(Only for non code block)
             text = re.sub(r'(?m)^%% (.*)$', r'<!-- \1 -->', text)
 
@@ -65,8 +72,10 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             text = re.sub(r'(?m)^====[ \t]+(.*)[ \t]+====\s*$', r'#### \1\n', text)
             text = re.sub(r'(?m)^===[ \t]+(.*)[ \t]+===\s*$', r'### \1\n', text)
             text = re.sub(r'(?m)^==[ \t]+(.*)[ \t]+==\s*$', r'## \1\n', text)
-            text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\n', text)
-            #text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\1\n====\n', text)
+            if mkdtype == 'pelican':
+                text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\n', text)
+            elif mkdtype == 'strict':
+                text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\1\n====\n', text)
 
             # Centered Header(Only for non code block)
             text = re.sub(r'(?m)^\s+======[ \t]+(.*)[ \t]+======\s*$',
@@ -79,9 +88,11 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                     r'<h3 style="text-align:center">\1</h3>\n', text)
             text = re.sub(r'(?m)^\s+==[ \t]+(.*)[ \t]+==\s*$',
                     r'<h2 style="text-align:center">\1</h2>\n', text)
-            #text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$', r'', text)
-            text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$',
-                    r'<h1 style="text-align:center">\1</h1>\n', text)
+            if mkdtype == 'pelican':
+                text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$', r'', text)
+            elif mkdtype == 'strict':
+                text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$',
+                        r'<h1 style="text-align:center">\1</h1>\n', text)
 
             a = []
             for line in text.split('\n'):
@@ -124,7 +135,8 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             # Ordered list(Only for non code block)
             text = re.sub(r'(?m)^(\s*)# (.*)$', r'\g<1>1. \2', text)
         else:
-            text = re.sub(r'(?ms){{{\s*\n(?P<indent>.*?)\n\s*}}}', indent4, text)
+            #text = re.sub(r'(?ms){{{\s*\n(?P<indent>.*?)\n\s*}}}', indent4, text)
+            text = re.sub(r'(?ms){{{[^\n]*\n(?P<indent>.*?)\n[^\n]*}}}', indent4, text)
 
         text_list_split_by_codeblock[i] = text
 
