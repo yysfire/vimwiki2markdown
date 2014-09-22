@@ -32,7 +32,9 @@ def blockquote(m):
 def vimwiki2markdown(text, mkdtype = 'pelican'):
     if re.search(r'(?mi)^%nohtml', text) != None:
         return ''
-        #return []
+
+    # eol
+    text = re.sub('\r\n', '\n', text)
 
     # Code block
     if (mkdtype == 'pelican'):
@@ -48,9 +50,6 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
 
     for i, text in enumerate(text_list_split_by_codeblock):
         if not text.startswith('{{{') or not text.endswith('}}}'):
-            # eol(Only for non code block)
-            text = re.sub('\r\n', '\n', text)
-
             if (mkdtype == 'pelican'):
                 # Metadata(Only for non code block)
                 text = re.sub(r'(?mi)^%title (.*)$', r'Title: \1', text)
@@ -162,4 +161,3 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
     text = ''.join(text_list_split_by_codeblock)
 
     return text
-    #return a
