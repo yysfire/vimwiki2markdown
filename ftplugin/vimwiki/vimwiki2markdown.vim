@@ -41,7 +41,7 @@ endif
 " --------------------------------
 "  Function(s)
 " --------------------------------
-function! Convert2Buffer(selection_or_buffer)
+function! s:Convert2Buffer(selection_or_buffer)
   if has('python3')
     exec "py3file " . expand(s:pluginPath . "/convert2buffer.py")
   else
@@ -50,7 +50,7 @@ endif
 
 endfunction
 
-function! Convert2File()
+function! s:Convert2File()
   if has('python3')
     exec "py3file " . expand(s:pluginPath . "/convert2file.py")
   else
@@ -62,6 +62,12 @@ endfunction
 " --------------------------------
 "  Expose our commands to the user
 " --------------------------------
-command! VimwikiBuf2MkdBuf call Convert2Buffer("buffer")
-command! -range VimwikiSel2MkdBuf call Convert2Buffer("selection")
-command! VimwikiBuf2MkdFile call Convert2File()
+if !exists(":VimwikiBuf2MkdBuf")
+  command -buffer -nargs=0 VimwikiBuf2MkdBuf call s:Convert2Buffer("buffer")
+endif
+if !exists(":VimwikiSel2MkdBuf")
+  command -buffer -nargs=0 -range VimwikiSel2MkdBuf call s:Convert2Buffer("selection")
+endif
+if !exists(":VimwikiBuf2MkdFile")
+  command -buffer -nargs=? -complete=file VimwikiBuf2MkdFile call s:Convert2File(<f-args>)
+endif
