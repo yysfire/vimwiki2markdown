@@ -35,11 +35,11 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
 
     # Code block
     if (mkdtype == 'pelican'):
-        text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*(.*?)"', r'\1\n:::\2\n', text)
-        text = re.sub(r'(?im)^\s*({{{)[ \t]*([\w].*)', r'\1\n:::\2\n', text)
+        text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*(.*?)".*$', r'\1\n:::\2', text)
+        text = re.sub(r'(?im)^\s*({{{)[ \t]*([\w].*)$', r'\1\n:::\2', text)
 
-    text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})',
-            indent4, text)
+    #text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})', indent4, text)
+    text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>{{{.*?}}})', indent4, text)
 
     text_list_split_by_codeblock = \
             re.split(r'(?ms)({{{.*?}}})', text)
@@ -137,7 +137,6 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             # Ordered list(Only for non code block)
             text = re.sub(r'(?m)^(\s*)# (.*)$', r'\g<1>1. \2', text)
         else:
-            #text = re.sub(r'(?ms){{{\s*\n(?P<indent>.*?)\n\s*}}}', indent4, text)
             text = re.sub(r'(?ms){{{[^\n]*\n(?P<indent>.*?)\n[^\n]*}}}', indent4, text)
 
         text_list_split_by_codeblock[i] = text
