@@ -24,7 +24,7 @@ Use your plugin manager of choice.
 - [x] Convert Vimwiki file to Markdown file for [Pelican](http://docs.getpelican.com/)
 - [ ] Add command to convert all Vimwiki files to Markdown
 - [ ] Write documentation
-- [ ] Support Github Flavored Markdown
+- [X] Support Github Flavored Markdown
 - [ ] Support PHP Markdown Extra
 - [ ] Support MultiMarkdown
 - [ ] Support converting Markdown to Vimwiki
