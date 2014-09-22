@@ -2,6 +2,10 @@
 
 import re
 
+#codeblock = re.compile(r'(?ms)({{{.*?}}})')
+#listblock = re.compile(r'(?m)^((?:\s*[-*#][ \t]+.*\n)(?:[^\n]+\n)*)')
+#tableblock = re.compile(r'(?m)((?:^[ \t]*[|].*?[|].*?[|]\n){2,})')
+
 list_item_begin = re.compile(r'^\s*[-*#]\s+')
 url1 = re.compile(r'^([a-zA-z]+://[^\s]*)(\s*)')
 url2 = re.compile(r'(\s)([a-zA-z]+://[^\s]*)(\s*)')
