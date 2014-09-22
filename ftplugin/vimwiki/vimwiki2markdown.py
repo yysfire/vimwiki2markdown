@@ -12,7 +12,7 @@ rbold1  = re.compile(r'(\S)\* ')
 rbold2  = re.compile(r'(\S)\*$')
 link1 = re.compile(r'\[\[([^:][^|]+?)[|](.+?)\]\]')
 link2 = re.compile(r'\[\[([^:].+?)\]\]')
-image1 =  re.compile(r'{{([^|{]+?)[|]([^|]+?)}}')
+image1 =  re.compile(r'{{([^|{]+?)[|]([^|]*?)([|]([^|]+?))?}}')
 image2 =  re.compile(r'{{([^{]+?)}}')
 inlinecode = re.compile(r'(`.+?`)')
 
