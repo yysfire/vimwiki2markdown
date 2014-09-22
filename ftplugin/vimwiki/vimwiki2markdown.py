@@ -2,6 +2,7 @@
 
 import re
 
+list_item_begin = re.compile(r'^\s*[-*#]\s+')
 url1 = re.compile(r'^([a-zA-z]+://[^\s]*)(\s*)')
 url2 = re.compile(r'(\s)([a-zA-z]+://[^\s]*)(\s*)')
 email = re.compile(r'(mailto:)?(?P<mail>\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)')
@@ -96,8 +97,26 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                         r'<h1 style="text-align:center">\1</h1>\n', text)
 
             a = []
+            blockquote_start = False
+            previous_line = None
             for line in text.split('\n'):
-                #line = line.rstrip()
+                if line.isspace():
+                    line = ''
+                    previous_line = line
+                    a.append(line)
+                    continue
+
+                if (previous_line == '' or blockquote_start) and line.startswith(('    ','\t')) and list_item_begin.match(line) == None:
+                    blockquote_start = True
+                    line = '>' + line.lstrip() + '\n>'
+                else:
+                    blockquote_start = False
+
+                previous_line = line
+                #if line == '' or line.isspace():
+                    #a.append(line)
+                    #continue
+
                 line_list_split_by_inlinecode = inlinecode.split(line)
 
                 for j, line in enumerate(line_list_split_by_inlinecode):
@@ -130,8 +149,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             text = '\n'.join(a)
 
             # Blockquotes(Only for non code block)
-            text = re.sub(r'(?m)^(?P<space>(    |\t)+)(?!(\* |- |# |\d[.] |\s*$))', blockquote, text)
-            text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>>.*?)(?P<suffix>\n[^>])',
+            text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>>.*?)(?P<suffix>\n[^>])',
                     indent4, text)
 
             # Ordered list(Only for non code block)
