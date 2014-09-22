@@ -12,6 +12,7 @@ rbold1  = re.compile(r'(\S)\* ')
 rbold2  = re.compile(r'(\S)\*$')
 link1 = re.compile(r'\[\[([^:][^|]+?)[|](.+?)\]\]')
 link2 = re.compile(r'\[\[([^:].+?)\]\]')
+diarylink = re.compile(r'\[\[(diary:)?(\d{4}-\d{2}-\d{2})\]\]')
 image1 =  re.compile(r'{{([^|{]+?)[|]([^|]*?)([|]([^|]+?))?}}')
 image2 =  re.compile(r'{{([^{]+?)}}')
 inlinecode = re.compile(r'(`.+?`)')
@@ -103,6 +104,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                     if not (line.startswith('`') and line.endswith('`')):
                         # Link(Both for non code block and non inline code)
                         line = link1.sub(r'[\2](\1)', line)
+                        line = diarylink.sub(r'[\2](diary/\2)', line)
                         line = link2.sub(r'[\1](\1)', line)
 
                         # Image link(Both for non code block and non inline code)
