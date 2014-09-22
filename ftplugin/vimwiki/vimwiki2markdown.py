@@ -29,7 +29,7 @@ def blockquote(m):
     return m.group('space').replace('\t', '>').replace('    ', '>')
 
 def vimwiki2markdown(text, mkdtype = 'pelican'):
-    if re.search(r'(?m)^%nohtml', text, re.IGNORECASE) != None:
+    if re.search(r'(?mi)^%nohtml', text) != None:
         return ''
         #return []
 
@@ -52,13 +52,13 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
 
             if (mkdtype == 'pelican'):
                 # Metadata(Only for non code block)
-                text = re.sub(r'(?m)^%title (.*)$', r'Title: \1', text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%template (.*)$', r'Category: \1', text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%toc.*$',r'[TOC]', text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%% (Date:.*)$', r'\1',text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%% (Modified:.*)$', r'\1', text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%% (Tags:.*)$',r'\1', text, flags=re.IGNORECASE)
-                text = re.sub(r'(?m)^%% (Slug:.*)$',r'\1', text, flags=re.IGNORECASE)
+                text = re.sub(r'(?mi)^%title (.*)$', r'Title: \1', text)
+                text = re.sub(r'(?mi)^%template (.*)$', r'Category: \1', text)
+                text = re.sub(r'(?mi)^%toc.*$',r'[TOC]', text)
+                text = re.sub(r'(?mi)^%% (Date:.*)$', r'\1',text)
+                text = re.sub(r'(?mi)^%% (Modified:.*)$', r'\1', text)
+                text = re.sub(r'(?mi)^%% (Tags:.*)$',r'\1', text)
+                text = re.sub(r'(?mi)^%% (Slug:.*)$',r'\1', text)
             elif mkdtype == 'strict':
                 text = re.sub(r'(?mi)^%title (.*)$', r'', text)
                 text = re.sub(r'(?mi)^%template (.*)$', r'', text)
