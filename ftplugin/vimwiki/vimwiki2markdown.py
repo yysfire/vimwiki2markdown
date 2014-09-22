@@ -8,9 +8,10 @@ url2 = re.compile(r'(\s)([a-zA-z]+://[^\s]*)(\s*)')
 email = re.compile(r'(mailto:)?(?P<mail>\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)')
 lbold1 = re.compile(r' \*(\S)')
 lbold2 = re.compile(r'^\*(\S)')
-#lbold3 = re.compile(r'^(\s*>+)\*(\S)')
 rbold1  = re.compile(r'(\S)\* ')
 rbold2  = re.compile(r'(\S)\*$')
+lbold3 = re.compile(r'^(\s*>+)\*(\S)')
+rbold3  = re.compile(r'(\S)\*\n')
 link1 = re.compile(r'\[\[([^:][^|]+?)[|](.+?)\]\]')
 link2 = re.compile(r'\[\[([^:].+?)\]\]')
 diarylink = re.compile(r'\[\[(diary:)?(\d{4}-\d{2}-\d{2})\]\]')
@@ -137,9 +138,11 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                         # Bold text(Both for non code block and non inline code)
                         line = lbold1.sub(r' **\1', line)
                         line = lbold2.sub(r'**\1', line)
-                        #line = lbold3.sub(r'\1**\2', line)
                         line = rbold1.sub(r'\1** ', line)
                         line = rbold2.sub(r'\1**', line)
+
+                        line = lbold3.sub(r'\1**\2', line)
+                        line = rbold3.sub(r'\1**\n', line)
 
                     line_list_split_by_inlinecode[j] = line
 
