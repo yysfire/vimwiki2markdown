@@ -47,7 +47,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
         text = re.sub(r'(?im)^\s*({{{)[ \t]*([\w].*)$', r'\1\n:::\2', text)
 
     #text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})', indent4, text)
-    text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>{{{.*?}}})', indent4, text)
+    text = re.sub(r'(?ms)^(?P<preline>\s*[-*#][ \t]+[^\n]*?)\s+(?P<indent>{{{.*?}}})', indent4, text)
 
     text_list_split_by_codeblock = \
             re.split(r'(?ms)({{{.*?}}})', text)
