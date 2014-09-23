@@ -33,8 +33,6 @@ def indent4(m):
     else:
         return '\n    ' + m.group('indent').replace('\n', '\n    ')
 
-def blockquote(m):
-    return m.group('space').replace('\t', '>').replace('    ', '>')
 
 def vimwiki2markdown(text, mkdtype = 'pelican'):
     if re.search(r'(?mi)^%nohtml', text) != None:
@@ -58,7 +56,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
     for i, text in enumerate(text_list_split_by_codeblock):
         if not text.startswith('{{{') or not text.endswith('}}}'):
             if (mkdtype == 'pelican'):
-                # Metadata(Only for non code block)
+                # Metadata
                 text = re.sub(r'(?mi)^%title (.*)$', r'Title: \1', text)
                 text = re.sub(r'(?mi)^%template (.*)$', r'Category: \1', text)
                 text = re.sub(r'(?mi)^%toc.*$',r'[TOC]', text)
@@ -71,10 +69,10 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                 text = re.sub(r'(?mi)^%template (.*)$', r'', text)
                 text = re.sub(r'(?mi)^%toc.*$',r'', text)
 
-            # Comment(Only for non code block)
+            # Comment
             text = re.sub(r'(?m)^%% (.*)$', r'<!-- \1 -->', text)
 
-            # Header(Only for non code block)
+            # Header
             text = re.sub(r'(?m)^======[ \t]+(.*)[ \t]+======\s*$', r'###### \1\n', text)
             text = re.sub(r'(?m)^=====[ \t]+(.*)[ \t]+=====\s*$', r'##### \1\n', text)
             text = re.sub(r'(?m)^====[ \t]+(.*)[ \t]+====\s*$', r'#### \1\n', text)
@@ -85,7 +83,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             elif mkdtype == 'strict':
                 text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\1\n====\n', text)
 
-            # Centered Header(Only for non code block)
+            # Centered Header
             text = re.sub(r'(?m)^\s+======[ \t]+(.*)[ \t]+======\s*$',
                     r'<h6 style="text-align:center">\1</h6>\n', text)
             text = re.sub(r'(?m)^\s+=====[ \t]+(.*)[ \t]+=====\s*$',
@@ -119,29 +117,26 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                     blockquote_start = False
 
                 previous_line = line
-                #if line == '' or line.isspace():
-                    #a.append(line)
-                    #continue
 
                 line_list_split_by_inlinecode = inlinecode.split(line)
 
                 for j, line in enumerate(line_list_split_by_inlinecode):
                     if not (line.startswith('`') and line.endswith('`')):
-                        # Link(Both for non code block and non inline code)
+                        # Link
                         line = link1.sub(r'[\2](\1)', line)
                         line = diarylink.sub(r'[\2](diary/\2)', line)
                         line = link2.sub(r'[\1](\1)', line)
 
-                        # Image link(Both for non code block and non inline code)
+                        # Image link
                         line = image1.sub(r'![\2](\1)', line)
                         line = image2.sub(r'![pic](\1)', line)
 
-                        # Raw URLs(Both for non code block and non inline code)
+                        # Raw URLs
                         line = url1.sub(r'<\1>\2', line)
                         line = url2.sub(r'\1<\2>\3', line)
                         line = email.sub(r'<\g<mail>>', line)
 
-                        # Bold text(Both for non code block and non inline code)
+                        # Bold text
                         line = lbold1.sub(r' **\1', line)
                         line = lbold2.sub(r'**\1', line)
                         line = rbold1.sub(r'\1** ', line)
@@ -156,11 +151,11 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                 a.append(line)
             text = '\n'.join(a)
 
-            # Blockquotes(Only for non code block)
             text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>>.*?)(?P<suffix>\n[^>])',
+            # Blockquotes
                     indent4, text)
 
-            # Ordered list(Only for non code block)
+            # Ordered list
             text = re.sub(r'(?m)^(\s*)# (.*)$', r'\g<1>1. \2', text)
         else:
             text = re.sub(r'(?ms){{{[^\n]*\n(?P<indent>.*?)\n[^\n]*}}}', indent4, text)
