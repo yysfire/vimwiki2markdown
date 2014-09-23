@@ -21,6 +21,10 @@ if !exists('g:vimwiki2markdown_markdown_type')
   let g:vimwiki2markdown_markdown_type = 'pelican'
 endif
 
+if !exists('g:vimwiki2markdown_output_dir')
+  let g:vimwiki2markdown_output_dir = ''
+endif
+
 if !exists('s:pluginPath')
   let s:pluginPath= escape(expand('<sfile>:p:h'), ' ')
 endif
@@ -50,7 +54,7 @@ endif
 
 endfunction
 
-function! s:Convert2File()
+function! s:Convert2File(curbuf_or_allwiki, ...)
   if has('python3')
     exec "py3file " . expand(s:pluginPath . "/convert2file.py")
   else
@@ -69,5 +73,11 @@ if !exists(":VimwikiSel2MkdBuf")
   command -buffer -nargs=0 -range VimwikiSel2MkdBuf call s:Convert2Buffer("selection")
 endif
 if !exists(":VimwikiBuf2MkdFile")
-  command -buffer -nargs=? -complete=file VimwikiBuf2MkdFile call s:Convert2File(<f-args>)
+  command -buffer -nargs=* -complete=file VimwikiBuf2MkdFile call s:Convert2File("curbuf", <f-args>)
+endif
+if !exists(":VimwikiBufs2MkdFile")
+  command -buffer -nargs=* -complete=dir VimwikiBufs2MkdFile bufdo call s:Convert2File("curbuf", <f-args>)
+endif
+if !exists(":VimwikiAll2MkdFile")
+  command -buffer -nargs=* -complete=dir VimwikiAll2MkdFile call s:Convert2File("allwiki", <f-args>)
 endif
