@@ -112,7 +112,8 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
 
                 if (previous_line == '' or blockquote_start) and line.startswith(('    ','\t')) and list_item_begin.match(line) == None:
                     blockquote_start = True
-                    line = '>' + line.lstrip() + '\n>'
+                    #line = '>' + line.lstrip() + '\n>'
+                    line = '>' + line.lstrip()
                 else:
                     blockquote_start = False
 
@@ -151,8 +152,9 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                 a.append(line)
             text = '\n'.join(a)
 
-            text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>>.*?)(?P<suffix>\n[^>])',
             # Blockquotes
+            #text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] [^\n]*?)\s+(?P<indent>>.*?)(?P<suffix>\n[^>])',
+            text = re.sub(r'(?ms)^(?P<preline>\s*[-*#][ \t]+[^\n]*?)\n(?P<indent>\s*>.*?)(?P<suffix>\n[^>])',
                     indent4, text)
 
             # Ordered list
