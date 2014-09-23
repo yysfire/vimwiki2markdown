@@ -20,9 +20,9 @@ Use your plugin manager of choice.
 
 ## Todo
 
-- [x] Convert Vimwiki file to [Strict Markdown](http://daringfireball.net/projects/markdown/syntax) file
-- [x] Convert Vimwiki file to Markdown file for [Pelican](http://docs.getpelican.com/)
-- [ ] Add command to convert all Vimwiki files to Markdown
+- [X] Convert Vimwiki file to [Strict Markdown](http://daringfireball.net/projects/markdown/syntax) file
+- [X] Convert Vimwiki file to Markdown file for [Pelican](http://docs.getpelican.com/)
+- [X] Add command to convert all Vimwiki files to Markdown
 - [ ] Write documentation
 - [X] Support Github Flavored Markdown
 - [ ] Support PHP Markdown Extra
