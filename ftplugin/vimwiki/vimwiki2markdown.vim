@@ -1,21 +1,21 @@
 " Init
-if exists('g:did_vimwiki2markdown_loaded')
-  finish
-endif
+"if exists('g:did_vimwiki2markdown_loaded')
+  "finish
+"endif
 
 if v:version < '703'
   echohl WarningMsg|echomsg "vimwiki2markdown unavailable: requires Vim 7.3+"|echohl None
-  let g:did_vimwiki2markdown_loaded = 0
+  "let g:did_vimwiki2markdown_loaded = 0
   finish
 endif
 
 if !has('python') && !has('python3')
   echohl WarningMsg|echomsg "vimwiki2markdown unavailable: requires Vim to be compiled with Python 2.6+"|echohl None
-  let g:did_vimwiki2markdown_loaded = 0
+  "let g:did_vimwiki2markdown_loaded = 0
   finish
 endif
 
-let g:did_vimwiki2markdown_loaded = 1
+"let g:did_vimwiki2markdown_loaded = 1
 
 if !exists('g:vimwiki2markdown_markdown_type')
   let g:vimwiki2markdown_markdown_type = 'pelican'
