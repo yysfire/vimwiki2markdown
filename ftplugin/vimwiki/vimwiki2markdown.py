@@ -1,6 +1,8 @@
+#!/usr/bin/env python
 # encoding: utf-8
 
 import re
+import io
 
 #codeblock = re.compile(r'(?ms)({{{.*?}}})')
 #listblock = re.compile(r'(?m)^((?:\s*[-*#][ \t]+.*\n)(?:[^\n]+\n)*)')
@@ -168,3 +170,21 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
     text = ''.join(text_list_split_by_codeblock)
 
     return text
+
+
+def vimwikifile2markdownfile(wikif, mkdf, mkdtype = 'pelican'):
+    """Convert vimwiki file to markdown file
+
+    :wikif: vimwiki file path
+    :mkdf:  markdown file path
+    :mkdtype: markdown file type
+
+    """
+
+    with io.open(wikif,'rt', encoding='utf-8') as wikifp:
+          text = wikifp.read()
+
+    mkd_contents = vimwiki2markdown(text, mkdtype)
+    if mkd_contents:
+        with io.open(mkdf, 'wt', encoding='utf-8') as mkdfp:
+            mkdfp.write(mkd_contents)
