@@ -43,31 +43,35 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
 
     # Code block
     if (mkdtype == 'pelican'):
-        text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*(.*?)".*$', r'\1\n:::\2', text)
+        text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*([^;"]+).*".*$', r'\1\n:::\2', text)
         text = re.sub(r'(?im)^\s*({{{)[ \t]*([\w].*)$', r'\1\n:::\2', text)
+    elif mkdtype == 'gfm':
+        text = re.sub(r'(?im)^\s*({{{)[ \t]*class="brush:[ \t]*([^;"]+).*".*$', r'\1\2', text)
+    else:
+        pass
 
-    #text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})', indent4, text)
-    text = re.sub(r'(?ms)^(?P<preline>\s*[-*#][ \t]+[^\n]*?)\s+(?P<indent>{{{.*?}}})', indent4, text)
+    if mkdtype == 'strict' or mkdtype == 'pelican':
+        #text = re.sub(r'(?ms)^(?P<preline>\s*[-*#] .*?)\n+(?P<indent>{{{.*?}}})', indent4, text)
+        text = re.sub(r'(?ms)^(?P<preline>\s*[-*#][ \t]+[^\n]*?)\s+(?P<indent>{{{.*?}}})', indent4, text)
 
     text_list_split_by_codeblock = \
             re.split(r'(?ms)({{{.*?}}})', text)
-            #re.split(r'(?ms)(^\s*{{{.*?}}}\s*$)', text)
 
     for i, text in enumerate(text_list_split_by_codeblock):
         if not text.startswith('{{{') or not text.endswith('}}}'):
-            if (mkdtype == 'pelican'):
-                # Metadata
+            # Metadata
+            if mkdtype == 'pelican':
+                text = re.sub(r'(?mi)^%toc.*$',r'[TOC]', text)
                 text = re.sub(r'(?mi)^%title (.*)$', r'Title: \1', text)
                 text = re.sub(r'(?mi)^%template (.*)$', r'Category: \1', text)
-                text = re.sub(r'(?mi)^%toc.*$',r'[TOC]', text)
                 text = re.sub(r'(?mi)^%% (Date:.*)$', r'\1',text)
                 text = re.sub(r'(?mi)^%% (Modified:.*)$', r'\1', text)
                 text = re.sub(r'(?mi)^%% (Tags:.*)$',r'\1', text)
                 text = re.sub(r'(?mi)^%% (Slug:.*)$',r'\1', text)
-            elif mkdtype == 'strict':
+            else:
+                text = re.sub(r'(?mi)^%toc.*$',r'', text)
                 text = re.sub(r'(?mi)^%title (.*)$', r'', text)
                 text = re.sub(r'(?mi)^%template (.*)$', r'', text)
-                text = re.sub(r'(?mi)^%toc.*$',r'', text)
 
             # Comment
             text = re.sub(r'(?m)^%% (.*)$', r'<!-- \1 -->', text)
@@ -80,7 +84,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             text = re.sub(r'(?m)^==[ \t]+(.*)[ \t]+==\s*$', r'## \1\n', text)
             if mkdtype == 'pelican':
                 text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\n', text)
-            elif mkdtype == 'strict':
+            else:
                 text = re.sub(r'(?m)^=[ \t]+(.*)[ \t]+=\s*$', r'\1\n====\n', text)
 
             # Centered Header
@@ -96,7 +100,7 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                     r'<h2 style="text-align:center">\1</h2>\n', text)
             if mkdtype == 'pelican':
                 text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$', r'', text)
-            elif mkdtype == 'strict':
+            else:
                 text = re.sub(r'(?m)^\s+=[ \t]+(.*)[ \t]+=\s*$',
                         r'<h1 style="text-align:center">\1</h1>\n', text)
 
@@ -160,7 +164,10 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
             # Ordered list
             text = re.sub(r'(?m)^(\s*)# (.*)$', r'\g<1>1. \2', text)
         else:
-            text = re.sub(r'(?ms){{{[^\n]*\n(?P<indent>.*?)\n[^\n]*}}}', indent4, text)
+            if mkdtype == 'gfm':
+                text = re.sub(r'(?ms){{{(.*?)}}}', r'```\1```', text)
+            else:
+                text = re.sub(r'(?ms){{{[^\n]*\n(?P<indent>.*?)\n[^\n]*}}}', indent4, text)
 
         text_list_split_by_codeblock[i] = text
 
