@@ -68,6 +68,8 @@ def vimwiki2markdown(text, mkdtype = 'pelican'):
                 text = re.sub(r'(?mi)^%% (Modified:.*)$', r'\1', text)
                 text = re.sub(r'(?mi)^%% (Tags:.*)$',r'\1', text)
                 text = re.sub(r'(?mi)^%% (Slug:.*)$',r'\1', text)
+                text = re.sub(r'(?mi)^%% (Lang:.*)$',r'\1', text)
+                text = re.sub(r'(?mi)^%% (Subtitle:.*)$',r'\1', text)
             else:
                 text = re.sub(r'(?mi)^%toc.*$',r'', text)
                 text = re.sub(r'(?mi)^%title (.*)$', r'', text)
